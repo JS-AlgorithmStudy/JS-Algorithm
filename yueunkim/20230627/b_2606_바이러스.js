@@ -9,7 +9,7 @@ const ssang = parseInt(input[1]);
 const connectedCom = Array.from({ length: num + 1 }, () => []);
 for (let i = 2; i < ssang + 2; i++) {
   const [a, b] = input[i].split(" ").map(Number);
-  //connectedCom.push([a,b])가 아니고
+  //connectedCom.push([a,b])
   connectedCom[a].push(b);
   connectedCom[b].push(a);
 }
