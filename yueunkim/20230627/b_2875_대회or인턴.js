@@ -42,7 +42,7 @@ function solution(n, m, k) {
 // //삽질
 // function solution(n, m, k) {
 //   let team = 0;
-//   let q = 0; // 몫
+//   let q = 0;
 
 //   if (n >= 2 && m >= 1) {
 //     //남학생 수가 여학생 수 이상인 경우
