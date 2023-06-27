@@ -6,7 +6,6 @@ function solution(array, target) {
   function DFS(i, sum) {
     //array의 모든 원소를 탐색한 경우
     if (i === array.length) {
-      console.log(array);
       //sum이 target과 같은 경우 답+1
       if (sum === target) answer++;
     } else {
