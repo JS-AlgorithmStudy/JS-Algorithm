@@ -12,7 +12,7 @@ function solution(elements) {
         //인덱스가 배열의 길이를 넘어갈 경우 인덱스 순환
         sum += elements[(j + k) % elements.length];
       }
-      result.add(sum); //중복 아닌 것만 알아서 추가
+      result.add(sum); //중복 아닌 것 추가
     }
   }
 

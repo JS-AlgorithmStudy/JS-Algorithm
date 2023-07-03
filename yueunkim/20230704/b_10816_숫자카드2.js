@@ -6,7 +6,7 @@ const input = require("fs")
   .split("\n");
 
 const haveNumber = input[1].split(" ").map(Number); //가지고 있는 숫자
-const checkNumber = input[3].split(" ").map(Number); //체크 할 숫자
+const checkNumber = input[3].split(" ").map(Number); //체크할 숫자
 
 const object = {}; //haveNumber에 담긴 숫자들을 각 개수와 함께 담을 객체
 haveNumber.forEach((n) => {
