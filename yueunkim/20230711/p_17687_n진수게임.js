@@ -7,7 +7,7 @@ function solution(n, t, m, p) {
     numbers += num; //numbers = "011011100"
     i++;
   }
-  //numbers의 길이가 t*m 되도록 자름
+  //numbers의 길이가 t*m가 되도록 자름
   numbers = numbers.slice(0, t * m); //numbers = "01101110"
 
   //numbers를 m개씩 쪼개서 numbersSlice에 넣기
