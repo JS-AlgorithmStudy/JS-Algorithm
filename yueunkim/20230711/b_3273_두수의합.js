@@ -13,7 +13,7 @@ const numberSet = new Set(haveNumber);
 
 for (let i = 0; i < haveNumber.length; i++) {
   let target = makeNumber - haveNumber[i];
-  if (numberSet.has(target) && haveNumber[i] !== target) answer++; //같은 숫자를 두 번 사용하는 경우 제외
+  if (numberSet.has(target) && haveNumber[i] !== target) answer++; //같은 숫자를 두번 사용하는 경우 제외
 }
 
 console.log(answer / 2); //중복 있으므로 2로 나눔
