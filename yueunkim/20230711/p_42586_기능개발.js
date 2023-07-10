@@ -5,7 +5,7 @@ function solution(progresses, speeds) {
   //기능별 완료되기까지 필요한 날 구하기
   for (let i = 0; i < progresses.length; i++) {
     let day = Math.ceil((100 - progresses[i]) / speeds[i]);
-    needDay.push(day); // needDay = [5, 10, 1, 1, 20, 1]
+    needDay.push(day); // needDay=[5, 10, 1, 1, 20, 1]
   }
 
   let compareDay = needDay[0];
