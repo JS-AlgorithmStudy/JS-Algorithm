@@ -1,6 +1,6 @@
 const input = require("fs")
-  // .readFileSync("/dev/stdin")
-  .readFileSync(__dirname + "/input.txt")
+  .readFileSync("/dev/stdin")
+  // .readFileSync(__dirname + "/input.txt")
   .toString()
   .trim()
   .split("\n");
@@ -8,7 +8,7 @@ const input = require("fs")
 const number = input[0];
 const numberSplit = number.split("");
 
-//모든 자리수의 합
+//모든 자리수 합
 let sum = 0;
 for (let i = 0; i < numberSplit.length; i++) {
   sum += parseInt(numberSplit[i]);
