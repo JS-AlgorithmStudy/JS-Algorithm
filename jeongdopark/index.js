@@ -1,49 +1,34 @@
-// https://school.programmers.co.kr/learn/courses/30/lessons/42586
-// 7/6 목 11:30 - 11:45
+// solve ) 
+// 미사일을 최소로 사용해서 모든 폭격 미사일을 요격하려한다.
 
+// A나라 x축에 평행하게 (s, e) -> s와 e는 요격할 수 없다. s초과 e미만
+// B나라 y축에 수평하게 ()
+// 
+// solve)
+// 정렬이 필요함.
+// 오름차순 ? 내림차순 ?
 
-// 하루 while
-// 첫 번째 작업이 배포 가능해야 연속 카운팅.
+const solution = (targets) => {
+  // 내림차순 , 오름차순으로 할 경우 딱 떨어지지 않음
+  // [ [ 11, 13 ], [ 10, 14 ], [ 5, 12 ], [ 4, 5 ], [ 4, 8 ], [ 3, 7 ], [ 1, 4 ] ]
+  const targets_sort = targets.sort((a, b) => b[0] - a[0])
+  // 가장 첫 번째 요격은 정렬된 첫 번째 시작점
+  let missile = targets_sort[0][0];
+  // 필요한 미사일 개수
+  var answer = 0;
 
-const solution = (progresses, speeds) => {
-  let answer = [];
-
-  // while loop 한 번이 하루
-  while(progresses.length > 0){
-    // 배포 가능한 개수
-    let count = 0;
-    // 배포 가능한지 boolean 
-    let isPos = false;
-
-    for(let i=0; i<progresses.length; i++){
-      // 첫 번째 작업 배포 여부가 중요함.
-      // 첫 번째 작업 배포가 안 될 경우 나머지 작업도 안 됨.
-      // i === 0 첫 번째 작업에서 isPos 변수 boolean 결정
-      progresses[i] += speeds[i]
-      if(i === 0){
-        if(progresses[i] >= 100){
-          isPos= true;
-          count += 1;
-        }
-      }else{
-        if(isPos && progresses[i] >= 100){ 
-            count += 1;
-          }else{
-            isPos = false;
-          }      
-        }
-      }
-      
-      // 배포 가능한 개수 만큼 progress, speeds shift()
-      if(count > 0){
-        answer.push(count)
-        for(let j=0; j<count; j++){
-          progresses.shift()
-          speeds.shift()
-        }
-      }
+  // 정렬된 입력값 순회
+  for(let i=0; i<targets_sort.length; i++){
+    // [11, 13]
+    const [start, end] = targets_sort[i];
+    // 미사일이 현재 end값과 같거나 작을 경우 미사일 업데이트 & 미사일 개수 +1
+    if(missile <= end){
+      missile = start;
+      answer += 1;
     }
+  }
+  
   return answer;
 }
 
-console.log(solution([95, 90, 99, 99, 80, 99], [1, 1, 1, 1, 1, 1]	));
+solution([[4,5],[4,8],[10,14],[11,13],[5,12],[3,7],[1,4]])
