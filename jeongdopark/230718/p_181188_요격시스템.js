@@ -15,14 +15,14 @@ const solution = (targets) => {
   // 가장 첫 번째 요격은 정렬된 첫 번째 시작점
   let missile = targets_sort[0][0];
   // 필요한 미사일 개수
-  var answer = 0;
+  var answer = 1;
 
   // 정렬된 입력값 순회
-  for(let i=0; i<targets_sort.length; i++){
-    // [11, 13]
+  for(let i=1; i<targets_sort.length; i++){
+    // [10, 14]
     const [start, end] = targets_sort[i];
-    // 미사일이 현재 end값과 같거나 작을 경우 미사일 업데이트 & 미사일 개수 +1
-    if(missile <= end){
+    // 미사일이 현재 end값과 같거나 클 경우 미사일 업데이트 & 미사일 개수 +1
+    if(end <= missile){
       missile = start;
       answer += 1;
     }
@@ -31,4 +31,4 @@ const solution = (targets) => {
   return answer;
 }
 
-solution([[4,5],[4,8],[10,14],[11,13],[5,12],[3,7],[1,4]])
+console.log(solution([[4,5],[4,8],[10,14],[11,13],[5,12],[3,7],[1,4]]));
