@@ -18,7 +18,6 @@ let BFS_ANS = [];
 for(let i=0; i<M; i++){
   const [A, B] = input[count++].split(' ').map(Number);
   // 양방향 그래프
-  // graph [ [], [ 2, 3, 4 ], [ 1, 4 ], [ 1, 4 ], [ 1, 2, 3 ] ]
   graph[A].push(B)
   graph[B].push(A)
 }
@@ -30,10 +29,15 @@ for(let i=1; i<graph.length; i++){
 
 // 방문 체크 
 const visited = Array(N+1).fill(false);
+  // [false, false, false, false, false]
 
+// board [ [], [ 2, 3, 4 ], [ 1, 4 ], [ 1, 4 ], [ 1, 2, 3 ] ]
 // V부터 방문된 점
-const DFS = (node) => {
-  if(visited[node]) return
+
+
+
+const DFS = (4) => {
+  if(visited[node]) return  // 탈출조건
   visited[node] = true
   
   DFS_ANS.push(node)
@@ -41,6 +45,7 @@ const DFS = (node) => {
   for(let i=0; i<graph[node].length; i++){
     DFS(graph[node][i])
   }
+
 }
 
 DFS(V)

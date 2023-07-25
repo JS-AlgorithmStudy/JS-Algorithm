@@ -26,7 +26,7 @@ const solution = (targets) => {
       missile = start;
       answer += 1;
     }
-  }
+  } 
   
   return answer;
 }
