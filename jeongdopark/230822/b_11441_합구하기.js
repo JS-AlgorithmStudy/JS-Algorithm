@@ -1,3 +1,6 @@
+// https://www.acmicpc.net/problem/11441
+// 누적합 알고리즘
+
 let input = require("fs")
   .readFileSync(__dirname + "/example.txt")
   .toString()
