@@ -30,8 +30,11 @@ function solution(m, n, puddles) {
       }
       // 첫 번째, 행 열 아닌 경우
       if (i !== 0 && k !== 0) {
+        // 윗칸
         let c = graph[i - 1][k];
+        // 왼쪽 칸
         let d = graph[i][k - 1];
+        // 웅덩이일 경우
         if (c === -1) c = 0;
         if (d === -1) d = 0;
         graph[i][k] = (c + d) % 1000000007;
@@ -41,3 +44,9 @@ function solution(m, n, puddles) {
   console.log(graph);
   return graph[n - 1][m - 1];
 }
+
+[
+  [1, 0, 0, 0],
+  [1, 0, 1, 1],
+  [1, 1, 1, 1],
+];
