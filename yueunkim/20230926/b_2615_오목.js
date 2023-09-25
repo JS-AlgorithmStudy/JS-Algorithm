@@ -18,24 +18,28 @@ function solution(omokBoard) {
 
         // 오른쪽 방향 (→) 판별
         if (col <= 14 && (col === 0 || omokBoard[row][col - 1] !== stone)) {
-          for (let count = 1; count <= 5; count++) {
-            if (col + count >= 19 || omokBoard[row][col + count] !== stone) {
-              if (count === 5)
-                return stone + "\n" + (row + 1) + " " + (col + 1);
-              break;
-            }
+          let count = 1;
+          while (
+            count <= 5 &&
+            col + count < 19 &&
+            omokBoard[row][col + count] === stone
+          ) {
+            count++;
           }
+          if (count === 5) return stone + "\n" + (row + 1) + " " + (col + 1);
         }
 
         // 아래 방향 (↓) 판별
         if (row <= 14 && (row === 0 || omokBoard[row - 1][col] !== stone)) {
-          for (let count = 1; count <= 5; count++) {
-            if (row + count >= 19 || omokBoard[row + count][col] !== stone) {
-              if (count === 5)
-                return stone + "\n" + (row + 1) + " " + (col + 1);
-              break;
-            }
+          let count = 1;
+          while (
+            count <= 5 &&
+            row + count < 19 &&
+            omokBoard[row + count][col] === stone
+          ) {
+            count++;
           }
+          if (count === 5) return stone + "\n" + (row + 1) + " " + (col + 1);
         }
 
         // 오른쪽 아래 대각선 방향 (↘) 판별
@@ -44,17 +48,16 @@ function solution(omokBoard) {
           col <= 14 &&
           (row === 0 || col === 0 || omokBoard[row - 1][col - 1] !== stone)
         ) {
-          for (let count = 1; count <= 5; count++) {
-            if (
-              row + count >= 19 ||
-              col + count >= 19 ||
-              omokBoard[row + count][col + count] !== stone
-            ) {
-              if (count === 5)
-                return stone + "\n" + (row + 1) + " " + (col + 1);
-              break;
-            }
+          let count = 1;
+          while (
+            count <= 5 &&
+            row + count < 19 &&
+            col + count < 19 &&
+            omokBoard[row + count][col + count] === stone
+          ) {
+            count++;
           }
+          if (count === 5) return stone + "\n" + (row + 1) + " " + (col + 1);
         }
 
         // 왼쪽 아래 대각선 방향 (↙) 판별
@@ -63,17 +66,17 @@ function solution(omokBoard) {
           col >= 4 &&
           (row === 0 || col === 18 || omokBoard[row - 1][col + 1] !== stone)
         ) {
-          for (let count = 1; count <= 5; count++) {
-            if (
-              row + count >= 19 ||
-              col - count < 0 ||
-              omokBoard[row + count][col - count] !== stone
-            ) {
-              if (count === 5)
-                return stone + "\n" + (row + 4 + 1) + " " + (col - 4 + 1);
-              break;
-            }
+          let count = 1;
+          while (
+            count <= 5 &&
+            row + count < 19 &&
+            col - count >= 0 &&
+            omokBoard[row + count][col - count] === stone
+          ) {
+            count++;
           }
+          if (count === 5)
+            return stone + "\n" + (row + 4 + 1) + " " + (col - 4 + 1);
         }
       }
     }
