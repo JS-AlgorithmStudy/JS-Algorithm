@@ -5,105 +5,81 @@ let input = require("fs")
   .split("\n");
 let count = 0;
 
-// 검은 바둑알 1
-// 흰 바둑알 2
-// 빈칸 0
-// 빈칸이 아닐 경우 8개의 방향을 탐색한다.
+// 현재 파이프의 놓인 방향을 파악
+// 가로, 세로, 대각선
+// 각 놓인 상태에 따라서 다음으로 진행할 수 있는 상태가 제한된다.
 
-const dy = [-1, -1, -1, 0, 0, 1, 1, 1];
-const dx = [-1, 0, 1, -1, 1, -1, 0, 1];
-const visited = Array.from({ length: 19 }, () =>
-  Array(19).fill(Array(8).fill(false))
-);
-console.log(visited[0][0]);
-console.log(visited[0]);
-
+// 가장 처음 파이프의 위치는 (0,0), (0,1)
+let answer = 0;
+const N = Number(input[count++]);
 const graph = [];
 
-for (let i = 0; i < 19; i++) {
+for (let i = 0; i < N; i++) {
   graph.push(input[count++].split(" ").map(Number));
 }
 
-// 탐색 함수 인자로 (현재 위치, 탐색 방향, 바둑돌 색상)
-const search = (y, x, dir, target) => {
-  visited[y][x][dir] = true;
-  let count = 1;
-  let crnt_y = y;
-  let crnt_x = x;
-  const arr = [[y, x]];
-  while (true) {
-    const next_y = crnt_y + dy[dir];
-    const next_x = crnt_x + dx[dir];
-    console.log(y, x, next_y, next_x);
-    // 구간 유효성 검사
-    if (next_y >= 0 && next_y < 19 && next_x >= 0 && next_x < 19) {
-      // 연속적으로 같은 색의 바둑돌인지 검사
-      if (graph[next_y][next_x] === target) {
-        if (visited[next_y][next_x][dir] === false) {
-          visited[next_y][next_x][dir] = true;
-          arr.push([next_y, next_x]);
-          count += 1;
-          // 5목을 넘어갈 경우
-          if (count >= 6) return [false];
-          crnt_y = next_y;
-          crnt_x = next_x;
-          // 다음 칸이 같은 색의 바둑돌이 아닐 경우
-        } else {
-          break;
-        }
-      } else {
-        break;
-      }
-    } else {
-      break;
-    }
+const direction = [
+  // 가로
+  [
+    [0, 1],
+    [1, 1],
+  ],
+  //세로
+  [
+    [1, 0],
+    [1, 1],
+  ],
+  // 대각선
+  [
+    [0, 1],
+    [1, 0],
+    [1, 1],
+  ],
+];
+
+// 현재 파이프의 방향을 반환하는 함수
+const pipe_direction = (start, end) => {
+  const [start_y, start_x] = start;
+  const [end_y, end_x] = end;
+  // 가로일 경우
+  if (start_y === end_y && start_x === end_x - 1) {
+    return 0;
   }
-  // 오목일 경우
-  if (count === 5) return [true, arr];
-  else return [false];
-};
-
-let answer = [];
-// 오목판 순회
-const solution = () => {
-  for (let i = 0; i < 19; i++) {
-    for (let k = 0; k < 19; k++) {
-      if (graph[i][k] !== 0) {
-        for (let j = 0; j < 8; j++) {
-          if (visited[i][k][j] === false) {
-            const result = search(i, k, j, graph[i][k]);
-
-            if (result[0]) {
-              const temp_arr = result[1];
-              temp_arr.sort((a, b) => {
-                // 두번째 요소 비교
-                if (a[1] < b[1]) {
-                  return -1;
-                } else if (a[1] > b[1]) {
-                  return 1;
-                } else {
-                  // 두번째 요소가 같을 경우 첫번째 요소로 비교
-                  return a[0] - b[0];
-                }
-              });
-              answer.push(graph[i][k], [
-                temp_arr[0][0] + 1,
-                temp_arr[0][1] + 1,
-              ]);
-              return;
-            }
-          }
-        }
-      }
-    }
+  // 세로일 경우
+  if (start_y === end_y - 1 && start_x === end_x) {
+    return 1;
+  }
+  // 대각선일 경우
+  if (start_y === end_y - 1 && start_x === end_x - 1) {
+    return 2;
   }
 };
 
-solution();
+const DFS = (start, end) => {
+  if (graph[N - 1][N - 1] === 1) return;
+  const dir = pipe_direction(start, end);
+  const [end_y, end_x] = end;
+  // 도착지일 경우
 
-if (answer.length > 0) {
-  console.log(answer[0]);
-  console.log(answer[1].join(" "));
-} else {
-  console.log(0);
-}
+  // 범위를 벗어난 경우 return
+  if (end_y < 0 || end_y >= N || end_x < 0 || end_x >= N) return;
+  // 벽일 경우 return
+  if (graph[end_y][end_x] === 1) return;
+  // 대각선일 경우 3곳을 확인해야한다.
+  if (dir === 2) {
+    if (graph[end_y - 1][end_x] === 1 || graph[end_y][end_x - 1] === 1) return;
+  }
+  if (end_y === N - 1 && end_x === N - 1) {
+    answer += 1;
+    return;
+  }
+
+  for (let i = 0; i < direction[dir].length; i++) {
+    const end_next_y = end_y + direction[dir][i][0];
+    const end_next_x = end_x + direction[dir][i][1];
+    DFS(end, [end_next_y, end_next_x]);
+  }
+};
+
+DFS([0, 0], [0, 1]);
+console.log(answer);

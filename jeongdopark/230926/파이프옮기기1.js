@@ -1,42 +1,3 @@
-class Node {
-  constructor(start, end) {
-    this.start = start;
-    this.end = end;
-    this.next = null;
-  }
-}
-
-class Queue {
-  constructor() {
-    this.head = null;
-    this.tail = null;
-    this.size = 0;
-  }
-
-  push(start, end) {
-    let node = new Node(start, end);
-    if (this.size === 0) {
-      this.head = node;
-    } else {
-      this.tail.next = node;
-    }
-    this.tail = node;
-    this.size++;
-  }
-
-  shift() {
-    let temp = this.head;
-    if (this.size === 0) {
-      this.head = null;
-      this.tail = null;
-    } else {
-      this.head = this.head.next;
-    }
-    this.size--;
-    return temp;
-  }
-}
-
 let input = require("fs")
   .readFileSync(__dirname + "/example.txt")
   .toString()
@@ -77,7 +38,7 @@ const direction = [
 ];
 
 // 현재 파이프의 방향을 반환하는 함수
-const pipe_status = (start, end) => {
+const pipe_direction = (start, end) => {
   const [start_y, start_x] = start;
   const [end_y, end_x] = end;
   // 가로일 경우
@@ -93,56 +54,30 @@ const pipe_status = (start, end) => {
     return 2;
   }
 };
-if (graph[N - 1][N - 1] === 1) {
-  answer = 0;
-} else {
-  const BFS = () => {
-    const start = [0, 0]; // 파이프의 시작 지점
-    const end = [0, 1]; // 파이프의 끝 지점
-    const queue = new Queue();
-    // const queue = [[start, end]];
-    queue.push(start, end);
-    // console.log(queue);
-    while (queue.size > 0) {
-      const crnt = queue.shift();
-      const crnt_start = crnt.start;
-      const crnt_end = crnt.end;
 
-      const crnt_direction = pipe_status(crnt_start, crnt_end);
-      for (let i = 0; i < direction[crnt_direction].length; i++) {
-        const dy = direction[crnt_direction][i][0];
-        const dx = direction[crnt_direction][i][1];
-        const next_y = crnt_end[0] + dy;
-        const next_x = crnt_end[1] + dx;
+const DFS = (start, end) => {
+  const dir = pipe_direction(start, end);
+  const [end_y, end_x] = end;
+  // 도착지일 경우
+  if (end_y === N - 1 && end_x === N - 1) {
+    answer += 1;
+    return;
+  }
+  // 범위를 벗어난 경우 return
+  if (end_y < 0 || end_y >= N || end_x < 0 || end_x >= N) return;
+  // 벽일 경우 return
+  if (graph[end_y][end_x] === 1) return;
+  // 대각선일 경우 3곳을 확인해야한다.
+  if (dir === 2) {
+    if (graph[end_y - 1][end_x] === 1 || graph[end_y][end_x - 1] === 1) return;
+  }
 
-        // 격자판 내부인지 확인
-        if (next_y >= 0 && next_y < N && next_x >= 0 && next_x < N) {
-          // 대각선 이동일 경우, 3칸을 확인해야한다. 3칸이 빈칸이어야함.
-          if (dy === 1 && dx === 1) {
-            if (
-              graph[crnt_end[0] + 1][crnt_end[1]] === 0 &&
-              graph[crnt_end[0]][crnt_end[1] + 1] === 0 &&
-              graph[crnt_end[0] + 1][crnt_end[1] + 1] === 0
-            ) {
-              if (next_y === N - 1 && next_x === N - 1) {
-                answer += 1;
-              }
-              queue.push(crnt_end, [next_y, next_x]);
-            }
-            // 대각선 이동이 아닐 경우
-          } else {
-            if (graph[next_y][next_x] === 0) {
-              if (next_y === N - 1 && next_x === N - 1) {
-                answer += 1;
-              }
-              queue.push(crnt_end, [next_y, next_x]);
-            }
-          }
-        }
-      }
-    }
-  };
-  BFS();
-}
+  for (let i = 0; i < direction[dir].length; i++) {
+    const end_next_y = end_y + direction[dir][i][0];
+    const end_next_x = end_x + direction[dir][i][1];
+    DFS(end, [end_next_y, end_next_x]);
+  }
+};
 
+DFS([0, 0], [0, 1]);
 console.log(answer);
