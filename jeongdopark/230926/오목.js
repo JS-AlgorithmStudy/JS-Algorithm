@@ -15,8 +15,6 @@ const dx = [-1, 0, 1, -1, 1, -1, 0, 1];
 const visited = Array.from({ length: 19 }, () =>
   Array(19).fill(Array(8).fill(false))
 );
-console.log(visited[0][0]);
-console.log(visited[0]);
 
 const graph = [];
 
@@ -26,6 +24,7 @@ for (let i = 0; i < 19; i++) {
 
 // 탐색 함수 인자로 (현재 위치, 탐색 방향, 바둑돌 색상)
 const search = (y, x, dir, target) => {
+  console.log(y, x, dir, target);
   visited[y][x][dir] = true;
   let count = 1;
   let crnt_y = y;
@@ -39,7 +38,10 @@ const search = (y, x, dir, target) => {
     if (next_y >= 0 && next_y < 19 && next_x >= 0 && next_x < 19) {
       // 연속적으로 같은 색의 바둑돌인지 검사
       if (graph[next_y][next_x] === target) {
+        console.log(y, x, next_y, next_x);
+        console.log(visited[next_y][next_x][dir]);
         if (visited[next_y][next_x][dir] === false) {
+          console.log(y, x, next_y, next_x);
           visited[next_y][next_x][dir] = true;
           arr.push([next_y, next_x]);
           count += 1;
@@ -59,6 +61,7 @@ const search = (y, x, dir, target) => {
     }
   }
   // 오목일 경우
+  console.log(count);
   if (count === 5) return [true, arr];
   else return [false];
 };
