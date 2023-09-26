@@ -60,24 +60,39 @@ const DFS = (start, end) => {
   const dir = pipe_direction(start, end);
   const [end_y, end_x] = end;
   // 도착지일 경우
-
-  // 범위를 벗어난 경우 return
-  if (end_y < 0 || end_y >= N || end_x < 0 || end_x >= N) return;
-  // 벽일 경우 return
-  if (graph[end_y][end_x] === 1) return;
-  // 대각선일 경우 3곳을 확인해야한다.
-  if (dir === 2) {
-    if (graph[end_y - 1][end_x] === 1 || graph[end_y][end_x - 1] === 1) return;
-  }
   if (end_y === N - 1 && end_x === N - 1) {
     answer += 1;
     return;
   }
 
   for (let i = 0; i < direction[dir].length; i++) {
-    const end_next_y = end_y + direction[dir][i][0];
-    const end_next_x = end_x + direction[dir][i][1];
-    DFS(end, [end_next_y, end_next_x]);
+    const dy = direction[dir][i][0];
+    const dx = direction[dir][i][1];
+
+    const end_next_y = end_y + dy;
+    const end_next_x = end_x + dx;
+
+    if (
+      end_next_y >= 0 &&
+      end_next_y < N &&
+      end_next_x >= 0 &&
+      end_next_x < N
+    ) {
+      if (graph[end_next_y][end_next_x] === 0) {
+        // 대각선
+        if (dy === 1 && dx === 1) {
+          if (
+            graph[end_next_y - 1][end_next_x] === 0 &&
+            graph[end_next_y][end_next_x - 1] === 0
+          ) {
+            DFS(end, [end_next_y, end_next_x]);
+          }
+          // 대각선 아닌 경우
+        } else {
+          DFS(end, [end_next_y, end_next_x]);
+        }
+      }
+    }
   }
 };
 
