@@ -37,64 +37,46 @@ const direction = [
   ],
 ];
 
-// 현재 파이프의 방향을 반환하는 함수
-const pipe_direction = (start, end) => {
-  const [start_y, start_x] = start;
-  const [end_y, end_x] = end;
-  // 가로일 경우
-  if (start_y === end_y && start_x === end_x - 1) {
-    return 0;
-  }
-  // 세로일 경우
-  if (start_y === end_y - 1 && start_x === end_x) {
-    return 1;
-  }
-  // 대각선일 경우
-  if (start_y === end_y - 1 && start_x === end_x - 1) {
-    return 2;
-  }
-};
-
-const DFS = (start, end) => {
+const DFS = (y, x, dir) => {
   if (graph[N - 1][N - 1] === 1) return;
-  const dir = pipe_direction(start, end);
-  const [end_y, end_x] = end;
   // 도착지일 경우
-  if (end_y === N - 1 && end_x === N - 1) {
+  if (y === N - 1 && x === N - 1) {
     answer += 1;
     return;
   }
 
-  for (let i = 0; i < direction[dir].length; i++) {
-    const dy = direction[dir][i][0];
-    const dx = direction[dir][i][1];
+  // 오른쪽 이동
+  if (dir === 0 || dir === 2) {
+    if (x + 1 < N) {
+      if (graph[y][x + 1] === 0) {
+        DFS(y, x + 1, 0);
+      }
+    }
+  }
 
-    const end_next_y = end_y + dy;
-    const end_next_x = end_x + dx;
+  // 아래로 이동
+  if (dir === 1 || dir === 2) {
+    if (y + 1 < N) {
+      if (graph[y + 1][x] === 0) {
+        DFS(y + 1, x, 1);
+      }
+    }
+  }
 
-    if (
-      end_next_y >= 0 &&
-      end_next_y < N &&
-      end_next_x >= 0 &&
-      end_next_x < N
-    ) {
-      if (graph[end_next_y][end_next_x] === 0) {
-        // 대각선
-        if (dy === 1 && dx === 1) {
-          if (
-            graph[end_next_y - 1][end_next_x] === 0 &&
-            graph[end_next_y][end_next_x - 1] === 0
-          ) {
-            DFS(end, [end_next_y, end_next_x]);
-          }
-          // 대각선 아닌 경우
-        } else {
-          DFS(end, [end_next_y, end_next_x]);
-        }
+  // 대각선 이동
+  if (dir === 0 || dir === 1 || dir === 2) {
+    if (y + 1 < N && x + 1 < N) {
+      // 세곳을 확인해야한다.
+      if (
+        graph[y + 1][x + 1] === 0 &&
+        graph[y + 1][x] === 0 &&
+        graph[y][x + 1] === 0
+      ) {
+        DFS(y + 1, x + 1, 2);
       }
     }
   }
 };
 
-DFS([0, 0], [0, 1]);
+DFS(0, 1, 0);
 console.log(answer);
